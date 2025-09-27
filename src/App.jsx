@@ -1,9 +1,8 @@
-import './App.css'
+import './assets/css/index.css'
+import Homepage from './page/Homepage'
 
 function App() {
-  return (
-    <></>
-  )
+  return <Homepage />
 }
 
 export default App
