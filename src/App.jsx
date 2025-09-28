@@ -1,26 +1,14 @@
-import AuthForm from "./component/AuthForm";
-import { useEffect, useState } from "react";
-import { auth } from "./firebase/firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
 
-function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (currentUser) =>
-      setUser(currentUser)
-    );
-    return () => unsub();
-  }, []);
-
-  return user ? (
-    <div>
-      <h1>Halo {user.email}</h1>
-      <button onClick={() => signOut(auth)}>Logout</button>
-    </div>
-  ) : (
-    <AuthForm />
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />          
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
