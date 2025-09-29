@@ -1,4 +1,3 @@
-
 import './assets/css/index.css'
 import Homepage from './page/Homepage'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
