@@ -1,10 +1,7 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, doc } from "firebase/firestore";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBWxrWxwHlz12jINNZT63TgkRVt9cAObIk",
   authDomain: "chatme-c3122.firebaseapp.com",
@@ -18,3 +15,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
+export const db = getFirestore(app);
+
+export function waitForUser() {
+  return new Promise((resolve, reject) => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      unsub();
+      if (user) resolve(user);
+      else reject(new Error("User belum login"));
+    });
+  });
+}
+
+async function userCollection(path) {
+  const user = auth.currentUser || (await waitForUser());
+  return collection(db, `users/${user.uid}/${path}`);
+}
+
+async function userDoc(path, id) {
+  const user = auth.currentUser || (await waitForUser());
+  return doc(db, `user/${user.uid}/${path}/${id}`);
+}
+
