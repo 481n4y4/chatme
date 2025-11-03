@@ -1,32 +1,39 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-<<<<<<< HEAD
-import { getAuth } from "firebase/auth";
-=======
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
->>>>>>> 5506e2f776cbd29b443923290e9ad0c3d6cdae86
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, doc } from "firebase/firestore";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBWxrWxwHlz12jINNZT63TgkRVt9cAObIk",
   authDomain: "chatme-c3122.firebaseapp.com",
   projectId: "chatme-c3122",
   storageBucket: "chatme-c3122.firebasestorage.app",
   messagingSenderId: "1082706118611",
-<<<<<<< HEAD
-  appId: "1:1082706118611:web:3ec680a3cb2861b6c99126"
-=======
   appId: "1:1082706118611:web:3ec680a3cb2861b6c99126",
->>>>>>> 5506e2f776cbd29b443923290e9ad0c3d6cdae86
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-<<<<<<< HEAD
-export const auth = getAuth(app);
-=======
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
->>>>>>> 5506e2f776cbd29b443923290e9ad0c3d6cdae86
+export const db = getFirestore(app);
+
+export function waitForUser() {
+  return new Promise((resolve, reject) => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      unsub();
+      if (user) resolve(user);
+      else reject(new Error("User belum login"));
+    });
+  });
+}
+
+async function userCollection(path) {
+  const user = auth.currentUser || (await waitForUser());
+  return collection(db, `users/${user.uid}/${path}`);
+}
+
+async function userDoc(path, id) {
+  const user = auth.currentUser || (await waitForUser());
+  return doc(db, `user/${user.uid}/${path}/${id}`);
+}
+
