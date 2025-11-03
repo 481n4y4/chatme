@@ -1,15 +1,39 @@
-import './assets/css/index.css'
-import Homepage from './page/Homepage'
 import { Routes, Route } from "react-router-dom";
-import Login from "./auth/Login";
-import Register from "./auth/Register";
+import { AuthProvider } from "./contexts/AuthContext";
+import Layout from "./components/Layout/Layout";
+import ChatList from "./components/Chats/ChastList";
+import ChatRoom from "./components/Chats/ChatRoom";
+import Login from "./components/Auth/Login"; // ✅ Path yang benar
+import Register from "./components/Auth/Register"; // ✅ Path yang benar
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
-export default function App() {
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Login />} />          
-      <Route path="/register" element={<Register />} />
-      <Route path="/home" element={<Homepage/>}/>
-    </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ChatList />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat/:chatId"
+            element={
+              <ProtectedRoute>
+                <ChatRoom />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
   );
 }
+
+export default App;
