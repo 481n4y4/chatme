@@ -9,30 +9,43 @@ import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
 function App() {
   return (
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <ChatList />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/chat/:chatId"
-            element={
-              <ProtectedRoute>
-                <ChatRoom />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </AuthProvider>
+    <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ChatList />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ChatList />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/chat/:chatId"
+          element={
+            <ProtectedRoute>
+              <ChatRoom />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </AuthProvider>
   );
 }
 
